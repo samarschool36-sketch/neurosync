@@ -1,1 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>NeuroSync</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+font-family:'Nunito',sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#e0e7ff,#f0f9ff,#fdf4ff);
+padding:20px;
+}
+
+.card{
+background:white;
+border-radius:20px;
+padding:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.btn{
+background:#6366f1;
+color:white;
+padding:10px 18px;
+border-radius:10px;
+}
+
+.task{
+display:flex;
+justify-content:space-between;
+padding:10px;
+border-bottom:1px solid #eee;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1 style="font-size:32px;font-weight:700;color:#4338ca;">
+🧠 NeuroSync
+</h1>
+
+<p style="color:#6366f1;">
+Your cognitive companion
+</p>
+
+<br>
+
+<div class="card">
+
+<h2 style="font-size:20px;font-weight:600;">📋 Task Manager</h2>
+
+<input id="taskInput"
+placeholder="Add task..."
+style="padding:10px;border:1px solid #ddd;border-radius:8px;width:70%;">
+
+<button class="btn" onclick="addTask()">Add</button>
+
+<div id="taskList" style="margin-top:20px;"></div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h2 style="font-size:20px;font-weight:600;">🎯 Focus Timer</h2>
+
+<h1 id="timer" style="font-size:40px;">25:00</h1>
+
+<button class="btn" onclick="startTimer()">Start</button>
+
+<button class="btn" onclick="resetTimer()">Reset</button>
+
+</div>
+
+<script>
+
+let tasks=[];
+
+function addTask(){
+
+let input=document.getElementById("taskInput");
+
+if(input.value==="") return;
+
+tasks.push(input.value);
+
+input.value="";
+
+renderTasks();
+}
+
+function renderTasks(){
+
+let list=document.getElementById("taskList");
+
+list.innerHTML="";
+
+tasks.forEach((task,i)=>{
+
+let div=document.createElement("div");
+
+div.className="task";
+
+div.innerHTML=`
+<span>${task}</span>
+<button onclick="deleteTask(${i})">❌</button>
+`;
+
+list.appendChild(div);
+
+});
+
+}
+
+function deleteTask(i){
+
+tasks.splice(i,1);
+
+renderTasks();
+
+}
+
+let time=1500;
+let interval=null;
+
+function startTimer(){
+
+if(interval) return;
+
+interval=setInterval(()=>{
+
+time--;
+
+updateTimer();
+
+if(time<=0){
+
+clearInterval(interval);
+interval=null;
+alert("Focus session completed 🎉");
+
+}
+
+},1000);
+
+}
+
+function resetTimer(){
+
+clearInterval(interval);
+
+interval=null;
+
+time=1500;
+
+updateTimer();
+
+}
+
+function updateTimer(){
+
+let minutes=Math.floor(time/60);
+let seconds=time%60;
+
+document.getElementById("timer").innerText=
+String(minutes).padStart(2,'0')+":"+
+String(seconds).padStart(2,'0');
+
+}
+
+</script>
+
+</body>
+</html>
